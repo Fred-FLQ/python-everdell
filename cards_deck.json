@@ -1,0 +1,42 @@
+[
+    {
+        "deck": "critter",
+        "name": "Judge",
+        "type": "Governance",
+        "type_color": "blue",
+        "cost": [
+            {
+                "resource": "berry",
+                "quantity": 2
+            },
+            {
+                "resource": "resin",
+                "quantity": 1
+            }
+        ],
+        "points": 2,
+        "unique": true
+    },
+    {
+        "deck": "construction",
+        "name": "Courthouse",
+        "type": "Governance",
+        "type_color": "blue",
+        "cost": [
+            {
+                "resource": "twig",
+                "quantity": 1
+            },
+            {
+                "resource": "resin",
+                "quantity": 1
+            },
+            {
+                "resource": "pebble",
+                "quantity": 2
+            }
+        ],
+        "points": 2,
+        "unique": true
+    }
+]

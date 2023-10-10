@@ -17,6 +17,8 @@ Note: If you're not familiar with Everdell, I recommend visiting BoardGameGeek [
 - [x] First draft of project scope
 - [x] First iteration of classes mapping and relationships
 - [x] Iniate and update To do list in Readme.md
+- [ ] **NEW** Add a global function to handle plural
+- [ ] **NEW** Decided to try to store and access cards data from a json file (SCOPE CREEP, here you are!!)
 
 ### Town Class
 
@@ -30,6 +32,13 @@ Note: If you're not familiar with Everdell, I recommend visiting BoardGameGeek [
     - [ ] Player action: display town's critters
     - [ ] Player action: display number of Victory Points
     - [ ] Player action: place a worker to get resources (*dependance: Location class*)
+    - [ ] 
+
+### Critter Class
+
+- [ ] Create Critters
+    - [x] Init constructor
+    - [x] Repr for tests and later UI
     - [ ] 
 
 ### Location Class

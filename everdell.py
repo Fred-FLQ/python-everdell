@@ -13,7 +13,7 @@
 ##################
 #   Game Setup   #
 ##################
-
+import json
 
 class Town:
     def __init__(self, name):
@@ -97,5 +97,10 @@ class Construction:
 # print(player1_town)
 # print(player2_town)
 
-judge = Critter("Judge", "Governance", {"Berry": 3, "Pebble": 1}, 2, True)
-print(judge)
+# judge = Critter("Judge", "Governance", {"Berry": 3, "Pebble": 1}, 2, True)
+# print(judge)
+
+with open('cards_deck.json') as cards_deck:
+    cards_data = json.load(cards_deck)
+
+print(cards_data[0]['cost'][0]['resource'])

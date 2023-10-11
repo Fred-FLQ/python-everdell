@@ -1,19 +1,15 @@
-# Classes setup
-# class Resource:
-#     def __init__(self, type):
-#         self.type = type
+##################
+#  Imports & Co  #
+##################
+import json
 
-#     def __repr__(self):
-#         ### IMPROVE: explain what is the resource mainly used for in description
-#         if self.type.lower() == "galet":
-#             return f"Cette ressource est un {self.type.lower()}."
-#         else:
-#             return f"Cette ressource est une {self.type.lower()}."
+with open("cards_deck.json") as cards_deck:
+    cards_data = json.load(cards_deck)
 
 ##################
 #   Game Setup   #
 ##################
-import json
+
 
 class Town:
     def __init__(self, name):
@@ -49,7 +45,7 @@ class Town:
         pass
 
 
-class Critter:  # For future version, need to learn how to create instances from a csv file or a database
+class Critter:
     def __init__(self, name, type, cost, points, unique=False):
         self.name = name
         self.type = type
@@ -58,23 +54,35 @@ class Critter:  # For future version, need to learn how to create instances from
         self.unique = unique
 
     def __repr__(self):
-        critter_repr = (
-            f"The {self.name} card is a {self.type} card. It costs:\n"
-        )
+        critter_repr = f"The {self.name} is a {'unique' if self.unique else ''} Critter. It is a {self.type} card that gives {self.points} victory points. It costs:\n"
 
         # definitely needs a global function to handle plural
-        for resource, quantity in self.cost.items():
+        for item in self.cost:
+            quantity = item["quantity"]
+            resource = item["resource"]
             critter_repr += f"- {quantity} {resource}\n"
 
         return critter_repr
 
 
 class Construction:
-    def __init__(self, name, cost, points, unique=False):
+    def __init__(self, name, type, cost, points, unique=False):
         self.name = name
+        self.type = type
         self.cost = cost
         self.points = points
         self.unique = unique
+
+    def __repr__(self):
+        construction_repr = f"The {self.name} is a {'unique' if self.unique else ''} Construction. It is a {self.type} card that gives {self.points} victory points. It costs:\n"
+
+        # definitely needs a global function to handle plural
+        for item in self.cost:
+            quantity = item["quantity"]
+            resource = item["resource"]
+            construction_repr += f"- {quantity} {resource}\n"
+
+        return construction_repr
 
 
 ##################
@@ -97,10 +105,33 @@ class Construction:
 # print(player1_town)
 # print(player2_town)
 
-# judge = Critter("Judge", "Governance", {"Berry": 3, "Pebble": 1}, 2, True)
-# print(judge)
 
-with open('cards_deck.json') as cards_deck:
-    cards_data = json.load(cards_deck)
+def first_cards_gen(cards_data):
+    cards_in_hand_gen = []
+    for i in range(2):
+        if cards_data[i]["deck"] == "critter":
+            cards_in_hand_gen.append(
+                Critter(
+                    cards_data[i]["name"],
+                    cards_data[i]["type"],
+                    cards_data[i]["cost"],
+                    cards_data[i]["points"],
+                    cards_data[i]["unique"],
+                )
+            )
+        elif cards_data[i]["deck"] == "construction":
+            cards_in_hand_gen.append(
+                Construction(
+                    cards_data[i]["name"],
+                    cards_data[i]["type"],
+                    cards_data[i]["cost"],
+                    cards_data[i]["points"],
+                    cards_data[i]["unique"],
+                )
+            )
 
-print(cards_data[0]['cost'][0]['resource'])
+    return cards_in_hand_gen
+
+
+player1_cards = first_cards_gen(cards_data)
+print(player1_cards)

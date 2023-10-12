@@ -6,6 +6,7 @@ import json
 with open("cards_deck.json") as cards_deck:
     cards_data = json.load(cards_deck)
 
+
 ##################
 #   Game Setup   #
 ##################
@@ -19,30 +20,85 @@ class Town:
         self.constructions = []
         self.critters = []
         self.resources = {"Twig": 0, "Resin": 0, "Pebble": 0, "Berry": 0}
-        self.cards_in_hand = []
+        self.cards_in_hand = [] # Should I leave this here or make it a standalone variable?
+
+        self.first_cards_gen(cards_data)
 
     # Use repr method to display Town's Dashboard
     def __repr__(self):
-        town_repr = (
-            f"Here is the dashboard for {self.name}'s town.\n"
-            f"Currently, you have {len(self.constructions)} constructions and {len(self.critters)} critters living in your town.\n"
-            f"You also have {self.workers} workers and the following resources at your disposal:\n"
+        town_dashboard = (
+            f"In {self.name}'s town, there are currently {len(self.constructions)} constructions and {len(self.critters)} critters.\n"
+            f"There are also {self.workers} workers and the following resources available:\n"
         )
 
         # This could be handled a different way through a dedicated function maybe?
-        # Could then use it for constructions and critters in town_repr.
+        # Could then use it for constructions and critters in above sentence.
         for resource, quantity in self.resources.items():
             if quantity > 1 and resource == "Berry":
-                town_repr += f"- {quantity} Berries\n"
+                town_dashboard += f"- {quantity} Berries\n"
             elif quantity > 1 and not resource == "Berry":
-                town_repr += f"- {quantity} {resource}s\n"
+                town_dashboard += f"- {quantity} {resource}s\n"
             else:
-                town_repr += f"- {quantity} {resource}\n"
+                town_dashboard += f"- {quantity} {resource}\n"
 
-        return town_repr
+        return town_dashboard
 
-    def place_worker():
-        pass
+    # For this version of the game, each player will get cards only once - change the range to change the number of cards
+    def first_cards_gen(self, cards_data):
+        for i in range(2):
+            if cards_data[i]["deck"] == "critter":
+                self.cards_in_hand.append(
+                    Critter(
+                        cards_data[i]["name"],
+                        cards_data[i]["type"],
+                        cards_data[i]["cost"],
+                        cards_data[i]["points"],
+                        cards_data[i]["unique"],
+                    )
+                )
+            elif cards_data[i]["deck"] == "construction":
+                self.cards_in_hand.append(
+                    Construction(
+                        cards_data[i]["name"],
+                        cards_data[i]["type"],
+                        cards_data[i]["cost"],
+                        cards_data[i]["points"],
+                        cards_data[i]["unique"],
+                    )
+                )
+
+        #return cards_in_hand
+
+    def action_menu(self):
+        print("Choose an action:")
+        print("1. Display Town's Dashboard")
+        print("2. Display cards in hand")
+        print("3. Place a worker")
+
+    def process_user_input(self):
+        user_input = input(f"{self.name}, what do you wanna do next? ")
+        if user_input == "1":
+            print(self)
+        elif user_input == "2":
+            if len(self.cards_in_hand) > 0:
+                print(self.cards_in_hand)
+                self.play_card(input(f"{self.name} Which card do you wanna play?"))
+            else:
+                print(f"{self.name}, you don't have any cards in your hand.")
+        elif user_input == "3":
+            self.place_worker()
+        else:
+            print(
+                "Your choice is not valid. Input the number of the action you wanna do."
+            )
+            self.action_menu()
+            self.process_user_input()
+
+    def play_card(self, card):
+        if len(self.cards_in_hand) > 0:
+            print(f"Which card do you wanna play?\n{self.cards_in_hand}")
+        else:
+            print(f"{self.name}, you don't have any cards in your hand.")
 
 
 class Critter:
@@ -95,43 +151,12 @@ class Construction:
 # ░▀░░░░▀░░░▀░░▀░▀░▀▀▀░▀░▀░░░▀▀▀░░▀░░▀▀▀░▀░▀░▀▀░░▀▀▀░▀▀▀░▀▀▀
 # """
 # print(intro_logo)
-# player1_name = input("Ready to play Python Everdell? What is your name?")
-# player2_name = input(
-#     "Welcome " + str(player1_name) + "! What is the name of your opponent?"
-# )
+player1_name = input("Ready to play Python Everdell?\nWhat is your name? ")
+player2_name = input(
+    "Welcome " + str(player1_name) + "!\nWhat is the name of your opponent? "
+)
 
-# player1_town = Town(player1_name)
-# player2_town = Town(player2_name)
-# print(player1_town)
-# print(player2_town)
-
-
-def first_cards_gen(cards_data):
-    cards_in_hand_gen = []
-    for i in range(2):
-        if cards_data[i]["deck"] == "critter":
-            cards_in_hand_gen.append(
-                Critter(
-                    cards_data[i]["name"],
-                    cards_data[i]["type"],
-                    cards_data[i]["cost"],
-                    cards_data[i]["points"],
-                    cards_data[i]["unique"],
-                )
-            )
-        elif cards_data[i]["deck"] == "construction":
-            cards_in_hand_gen.append(
-                Construction(
-                    cards_data[i]["name"],
-                    cards_data[i]["type"],
-                    cards_data[i]["cost"],
-                    cards_data[i]["points"],
-                    cards_data[i]["unique"],
-                )
-            )
-
-    return cards_in_hand_gen
-
-
-player1_cards = first_cards_gen(cards_data)
-print(player1_cards)
+player1_town = Town(player1_name)
+player2_town = Town(player2_name)
+player1_town.action_menu()
+player1_town.process_user_input()

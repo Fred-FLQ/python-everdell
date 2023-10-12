@@ -8,6 +8,7 @@ import json
 with open("cards_deck.json") as cards_deck:
     cards_data = json.load(cards_deck)
 
+#### After adding more cards info to json file, I should randomize and pop cards that get into players' hands.
 
 ##################
 #   Game Setup   #
@@ -60,12 +61,14 @@ class Town:
 
         # return cards_in_hand
 
+    # Display possible player's actions
     def action_menu(self):
         print("Choose an action:")
         print("1. Display Town's Dashboard")
         print("2. Display cards in hand")
         print("3. Place a worker")
 
+    # Process player's choice
     def process_user_input(self):
         user_input = input(f"{self.name}, what do you wanna do next? ")
         if user_input == "1":
@@ -85,9 +88,11 @@ class Town:
             self.action_menu()
             self.process_user_input()
 
+    # Check if played card valid, remove it from player's hand and add it to town
     def play_card(self, card):
         if card in self.cards_in_hand:
             print(f"You just played {card}.")
+            # Getting messy here, maybe not differetiating betwenn critters and constructions would have been better...
             played_card = self.cards_in_hand[card]
             if played_card.deck == "critter":
                 self.critters.append(self.cards_in_hand.pop(card))

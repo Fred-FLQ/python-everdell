@@ -1,17 +1,13 @@
 [
     {
         "deck": "critter",
-        "name": "Judge",
-        "type": "Governance",
+        "name": "judge",
+        "type": "governance",
         "type_color": "blue",
         "cost": [
             {
                 "resource": "berry",
-                "quantity": 2
-            },
-            {
-                "resource": "resin",
-                "quantity": 1
+                "quantity": 3
             }
         ],
         "points": 2,
@@ -19,8 +15,8 @@
     },
     {
         "deck": "construction",
-        "name": "Courthouse",
-        "type": "Governance",
+        "name": "courthouse",
+        "type": "governance",
         "type_color": "blue",
         "cost": [
             {
@@ -37,6 +33,138 @@
             }
         ],
         "points": 2,
+        "unique": true
+    },
+    {
+        "deck": "critter",
+        "name": "husband",
+        "type": "production",
+        "type_color": "green",
+        "cost": [
+            {
+                "resource": "berry",
+                "quantity": 3
+            }
+        ],
+        "points": 2,
+        "unique": false
+    },
+    {
+        "deck": "critter",
+        "name": "barge toad",
+        "type": "production",
+        "type_color": "green",
+        "cost": [
+            {
+                "resource": "berry",
+                "quantity": 2
+            }
+        ],
+        "points": 1,
+        "unique": false
+    },
+    {
+        "deck": "critter",
+        "name": "king",
+        "type": "prosperity",
+        "type_color": "purple",
+        "cost": [
+            {
+                "resource": "berry",
+                "quantity": 6
+            }
+        ],
+        "points": 4,
+        "unique": true
+    },
+    {
+        "deck": "critter",
+        "name": "shopkeeper",
+        "type": "governance",
+        "type_color": "blue",
+        "cost": [
+            {
+                "resource": "berry",
+                "quantity": 2
+            }
+        ],
+        "points": 1,
+        "unique": true
+    },
+    {
+        "deck": "construction",
+        "name": "general store",
+        "type": "production",
+        "type_color": "green",
+        "cost": [
+            {
+                "resource": "pebble",
+                "quantity": 1
+            },
+            {
+                "resource": "resin",
+                "quantity": 1
+            }
+        ],
+        "points": 1,
+        "unique": false
+    },
+    {
+        "deck": "construction",
+        "name": "farm",
+        "type": "production",
+        "type_color": "green",
+        "cost": [
+            {
+                "resource": "twig",
+                "quantity": 2
+            },
+            {
+                "resource": "resin",
+                "quantity": 1
+            }
+        ],
+        "points": 1,
+        "unique": false
+    },
+    {
+        "deck": "construction",
+        "name": "twig barge",
+        "type": "production",
+        "type_color": "green",
+        "cost": [
+            {
+                "resource": "twig",
+                "quantity": 1
+            },
+            {
+                "resource": "pebble",
+                "quantity": 1
+            }
+        ],
+        "points": 1,
+        "unique": false
+    },
+    {
+        "deck": "construction",
+        "name": "castle",
+        "type": "prosperity",
+        "type_color": "purple",
+        "cost": [
+            {
+                "resource": "twig",
+                "quantity": 2
+            },
+            {
+                "resource": "resin",
+                "quantity": 3
+            },
+            {
+                "resource": "pebble",
+                "quantity": 3
+            }
+        ],
+        "points": 4,
         "unique": true
     }
 ]

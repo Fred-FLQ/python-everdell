@@ -7,7 +7,7 @@
 - [x] Iniate and update To do list in Readme.md
 - [ ] **NEW** Add a global function to handle plural
 - [x] Decided to try to store and access cards data from a json file (SCOPE CREEP, here you are!!)
-- [ ] Add more cards info to json file
+- [X] Add more cards info to json file
 
 ## Classes
 

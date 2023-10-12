@@ -1,6 +1,8 @@
 ##################
 #  Imports & Co  #
 ##################
+
+
 import json
 
 with open("cards_deck.json") as cards_deck:
@@ -20,7 +22,7 @@ class Town:
         self.constructions = []
         self.critters = []
         self.resources = {"Twig": 0, "Resin": 0, "Pebble": 0, "Berry": 0}
-        self.cards_in_hand = [] # Should I leave this here or make it a standalone variable?
+        self.cards_in_hand = {}
 
         self.first_cards_gen(cards_data)
 
@@ -31,8 +33,8 @@ class Town:
             f"There are also {self.workers} workers and the following resources available:\n"
         )
 
-        # This could be handled a different way through a dedicated function maybe?
-        # Could then use it for constructions and critters in above sentence.
+        # This could be handled a different way through a dedicated global function maybe?
+        # Could then use it in every sentences... -_-
         for resource, quantity in self.resources.items():
             if quantity > 1 and resource == "Berry":
                 town_dashboard += f"- {quantity} Berries\n"
@@ -46,28 +48,17 @@ class Town:
     # For this version of the game, each player will get cards only once - change the range to change the number of cards
     def first_cards_gen(self, cards_data):
         for i in range(2):
-            if cards_data[i]["deck"] == "critter":
-                self.cards_in_hand.append(
-                    Critter(
-                        cards_data[i]["name"],
-                        cards_data[i]["type"],
-                        cards_data[i]["cost"],
-                        cards_data[i]["points"],
-                        cards_data[i]["unique"],
-                    )
+            card = Card(
+                    cards_data[i]["deck"],
+                    cards_data[i]["name"],
+                    cards_data[i]["type"],
+                    cards_data[i]["cost"],
+                    cards_data[i]["points"],
+                    cards_data[i]["unique"],
                 )
-            elif cards_data[i]["deck"] == "construction":
-                self.cards_in_hand.append(
-                    Construction(
-                        cards_data[i]["name"],
-                        cards_data[i]["type"],
-                        cards_data[i]["cost"],
-                        cards_data[i]["points"],
-                        cards_data[i]["unique"],
-                    )
-                )
+            self.cards_in_hand[cards_data[i]["name"]] = card
 
-        #return cards_in_hand
+        # return cards_in_hand
 
     def action_menu(self):
         print("Choose an action:")
@@ -82,7 +73,7 @@ class Town:
         elif user_input == "2":
             if len(self.cards_in_hand) > 0:
                 print(self.cards_in_hand)
-                self.play_card(input(f"{self.name} Which card do you wanna play?"))
+                self.play_card(input(f"{self.name} Which card do you wanna play? "))
             else:
                 print(f"{self.name}, you don't have any cards in your hand.")
         elif user_input == "3":
@@ -95,14 +86,22 @@ class Town:
             self.process_user_input()
 
     def play_card(self, card):
-        if len(self.cards_in_hand) > 0:
-            print(f"Which card do you wanna play?\n{self.cards_in_hand}")
+        if card in self.cards_in_hand:
+            print(f"You just played {card}.")
+            played_card = self.cards_in_hand[card]
+            if played_card.deck == "critter":
+                self.critters.append(self.cards_in_hand.pop(card))
+            elif played_card.deck == "construction":
+                self.constructions.append(self.cards_in_hand.pop(card))
+            print(f"You now have {len(self.critters)} critters and {len(self.constructions)} constructions in your town.")
         else:
-            print(f"{self.name}, you don't have any cards in your hand.")
+            print("You don't have this card in your hand.")
+            self.play_card(input("Please choose an other card. "))
 
 
-class Critter:
-    def __init__(self, name, type, cost, points, unique=False):
+class Card:
+    def __init__(self, deck, name, type, cost, points, unique=False):
+        self.deck = deck
         self.name = name
         self.type = type
         self.cost = cost
@@ -110,35 +109,15 @@ class Critter:
         self.unique = unique
 
     def __repr__(self):
-        critter_repr = f"The {self.name} is a {'unique' if self.unique else ''} Critter. It is a {self.type} card that gives {self.points} victory points. It costs:\n"
+        card_repr = f"The {self.name.title()} is a {'unique' if self.unique else ''} {self.deck.title()}. It is a {self.type} card that gives {self.points} Victory Points. It costs:\n"
 
         # definitely needs a global function to handle plural
         for item in self.cost:
             quantity = item["quantity"]
             resource = item["resource"]
-            critter_repr += f"- {quantity} {resource}\n"
+            card_repr += f"- {quantity} {resource.title()}\n"
 
-        return critter_repr
-
-
-class Construction:
-    def __init__(self, name, type, cost, points, unique=False):
-        self.name = name
-        self.type = type
-        self.cost = cost
-        self.points = points
-        self.unique = unique
-
-    def __repr__(self):
-        construction_repr = f"The {self.name} is a {'unique' if self.unique else ''} Construction. It is a {self.type} card that gives {self.points} victory points. It costs:\n"
-
-        # definitely needs a global function to handle plural
-        for item in self.cost:
-            quantity = item["quantity"]
-            resource = item["resource"]
-            construction_repr += f"- {quantity} {resource}\n"
-
-        return construction_repr
+        return card_repr
 
 
 ##################
@@ -158,5 +137,7 @@ player2_name = input(
 
 player1_town = Town(player1_name)
 player2_town = Town(player2_name)
+
+
 player1_town.action_menu()
 player1_town.process_user_input()

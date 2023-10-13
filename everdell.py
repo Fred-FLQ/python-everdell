@@ -2,13 +2,15 @@
 #  Imports & Co  #
 ##################
 
+import random
 
 import json
 
 with open("cards_deck.json") as cards_deck:
     cards_data = json.load(cards_deck)
 
-#### After adding more cards info to json file, I should randomize and pop cards that get into players' hands.
+# Check deck length (uncomment for test only)
+# print("lenght of deck:" + str(len(cards_data)))
 
 ##################
 #   Game Setup   #
@@ -46,18 +48,23 @@ class Town:
 
         return town_dashboard
 
-    # For this version of the game, each player will get cards only once - change the range to change the number of cards
+    # For this version of the game, each player will get cards only once
     def first_cards_gen(self, cards_data):
-        for i in range(2):
-            card = Card(
-                    cards_data[i]["deck"],
-                    cards_data[i]["name"],
-                    cards_data[i]["type"],
-                    cards_data[i]["cost"],
-                    cards_data[i]["points"],
-                    cards_data[i]["unique"],
-                )
-            self.cards_in_hand[cards_data[i]["name"]] = card
+        # Deal 5 cards to each player
+        for cards_count in range(5):
+            if len(cards_data) > 0:
+                # Randomize and pop cards that get into players' hand
+                i = random.randint(0, len(cards_data)-1)
+                card = Card(
+                        cards_data[i]["deck"],
+                        cards_data[i]["name"],
+                        cards_data[i]["type"],
+                        cards_data[i]["cost"],
+                        cards_data[i]["points"],
+                        cards_data[i]["unique"],
+                    )
+                self.cards_in_hand[cards_data[i]["name"]] = card
+                cards_data.pop(i)
 
         # return cards_in_hand
 
@@ -90,14 +97,14 @@ class Town:
 
     # Check if played card valid, remove it from player's hand and add it to town
     def play_card(self, card):
-        if card in self.cards_in_hand:
-            print(f"You just played {card}.")
+        if card.lower() in self.cards_in_hand:
+            print(f"You just played {card.title()}.")
             # Getting messy here, maybe not differetiating betwenn critters and constructions would have been better...
-            played_card = self.cards_in_hand[card]
+            played_card = self.cards_in_hand[card.lower()]
             if played_card.deck == "critter":
-                self.critters.append(self.cards_in_hand.pop(card))
+                self.critters.append(self.cards_in_hand.pop(card.lower()))
             elif played_card.deck == "construction":
-                self.constructions.append(self.cards_in_hand.pop(card))
+                self.constructions.append(self.cards_in_hand.pop(card.lower()))
             print(f"You now have {len(self.critters)} critters and {len(self.constructions)} constructions in your town.")
         else:
             print("You don't have this card in your hand.")
@@ -146,3 +153,6 @@ player2_town = Town(player2_name)
 
 player1_town.action_menu()
 player1_town.process_user_input()
+
+# Check deck length (uncomment for test only)
+# print("lenght of deck:" + str(len(cards_data)))

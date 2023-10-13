@@ -17,8 +17,8 @@
     - [x] Add and display Town's name
     - [x] Add and display Town's Dashboard with number of constructions, critters, workers and resources.
     - [x] Add and display cards in hand
-    - [ ] Add different cards to player 1 hand and player 2 hand
-    - [ ] Randomize cards dealt to players
+    - [x] Add different cards to player 1 hand and player 2 hand
+    - [x] Randomize cards dealt to players
 
 - [ ] Add Player's actions to Town:
     - [ ] Player action: display town's constructions
@@ -32,7 +32,7 @@
 
 ### Card Class
 
-- [ ] Create Card class Critters
+- [x] Create Card class
     - [x] Init constructor
     - [x] Repr for tests and later UI
     - [x] Merge older Critter and Construction class into this one

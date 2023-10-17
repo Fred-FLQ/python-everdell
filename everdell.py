@@ -42,6 +42,7 @@ class Game:
         print("1. Display Town's Dashboard")
         print("2. Display cards in hand")
         print("3. Place a worker")
+        print("4. Stop playing")
     
      # Process player's choice depending on active player
     def process_user_input(self):
@@ -72,6 +73,8 @@ class Game:
                     self.process_user_input()
         elif user_input == "3":
             self.place_worker()
+        elif user_input == "4":
+            exit()
         else:
             print(
                 "Your choice is not valid. Input the number of the action you wanna do."

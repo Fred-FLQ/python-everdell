@@ -29,10 +29,20 @@ class Town:
 
         self.first_cards_gen(cards_data)
 
-    # Use repr method to display Town's Dashboard
+    # Simplified repr to stick to Python's principles
     def __repr__(self):
+        town_repr = (
+            f"In {self.name}'s town, there are currently {len(self.constructions)} constructions and {len(self.critters)} critters.\n"
+            f"{self.name} has {self.total_points} Victory Points."
+        )
+
+        return town_repr
+
+    # Dedicated method to display Town's Dashboard
+    def town_dashboard(self):
         town_dashboard = (
             f"In {self.name}'s town, there are currently {len(self.constructions)} constructions and {len(self.critters)} critters.\n"
+            f"It represents {self.total_points} Victory Points.\n"
             f"There are also {self.workers} workers and the following resources available:\n"
         )
 
@@ -46,7 +56,9 @@ class Town:
             else:
                 town_dashboard += f"- {quantity} {resource}\n"
 
-        return town_dashboard
+        print(town_dashboard)
+        self.action_menu()
+        self.process_user_input()
 
     # For this version of the game, each player will get cards only once
     def first_cards_gen(self, cards_data):
@@ -79,13 +91,16 @@ class Town:
     def process_user_input(self):
         user_input = input(f"{self.name}, what do you wanna do next? ")
         if user_input == "1":
-            print(self)
+            self.town_dashboard()
         elif user_input == "2":
             if len(self.cards_in_hand) > 0:
+                print(f"{self.name}, here are the cards you have in hand:\n")
                 print(self.cards_in_hand)
-                self.play_card(input(f"{self.name} Which card do you wanna play? "))
+                self.play_card(input(f"{self.name}, which card do you wanna play? "))
             else:
                 print(f"{self.name}, you don't have any cards in your hand.")
+                self.action_menu()
+                self.process_user_input()
         elif user_input == "3":
             self.place_worker()
         else:
@@ -99,17 +114,20 @@ class Town:
     def play_card(self, card):
         if card.lower() in self.cards_in_hand:
             print(f"You just played {card.title()}.")
-            # Getting messy here, maybe not differetiating betwenn critters and constructions would have been better...
             played_card = self.cards_in_hand[card.lower()]
+            # Checking type of card to add to the right category
             if played_card.deck == "critter":
                 self.critters.append(self.cards_in_hand.pop(card.lower()))
             elif played_card.deck == "construction":
                 self.constructions.append(self.cards_in_hand.pop(card.lower()))
-            print(f"You now have {len(self.critters)} critters and {len(self.constructions)} constructions in your town.")
+            # Adding card's points to Town's Victory Points
+            self.total_points += played_card.points
+            print(f"You now have {len(self.critters)} critters and {len(self.constructions)} constructions in your town. It represents {self.total_points} Victory Points.")
         else:
             print("You don't have this card in your hand.")
             self.play_card(input("Please choose an other card. "))
-
+        self.action_menu()
+        self.process_user_input()
 
 class Card:
     def __init__(self, deck, name, type, cost, points, unique=False):
@@ -136,15 +154,15 @@ class Card:
 # Game mechanics #
 ##################
 
-# intro_logo = r"""
-# ░█▀█░█░█░▀█▀░█░█░█▀█░█▀█░░░█▀▀░█░█░█▀▀░█▀▄░█▀▄░█▀▀░█░░░█░░
-# ░█▀▀░░█░░░█░░█▀█░█░█░█░█░░░█▀▀░▀▄▀░█▀▀░█▀▄░█░█░█▀▀░█░░░█░░
-# ░▀░░░░▀░░░▀░░▀░▀░▀▀▀░▀░▀░░░▀▀▀░░▀░░▀▀▀░▀░▀░▀▀░░▀▀▀░▀▀▀░▀▀▀
-# """
-# print(intro_logo)
-player1_name = input("Ready to play Python Everdell?\nWhat is your name? ")
+intro_logo = r"""
+░█▀█░█░█░▀█▀░█░█░█▀█░█▀█░░░█▀▀░█░█░█▀▀░█▀▄░█▀▄░█▀▀░█░░░█░░
+░█▀▀░░█░░░█░░█▀█░█░█░█░█░░░█▀▀░▀▄▀░█▀▀░█▀▄░█░█░█▀▀░█░░░█░░
+░▀░░░░▀░░░▀░░▀░▀░▀▀▀░▀░▀░░░▀▀▀░░▀░░▀▀▀░▀░▀░▀▀░░▀▀▀░▀▀▀░▀▀▀
+"""
+print(intro_logo)
+player1_name = input("Ready to play Python Everdell?\nWhat is Player 1's name? ")
 player2_name = input(
-    "Welcome " + str(player1_name) + "!\nWhat is the name of your opponent? "
+    "Welcome " + str(player1_name) + "!\nWhat is the Player 2's name? "
 )
 
 player1_town = Town(player1_name)

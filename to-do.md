@@ -5,7 +5,7 @@
 - [x] First draft of project scope
 - [x] First iteration of classes mapping and relationships
 - [x] Iniate and update To do list in Readme.md
-- [ ] **NEW** Add a global function to handle plural
+- [ ] **FUTURE VERSION** Add a global function to handle plural
 - [x] Decided to try to store and access cards data from a json file (SCOPE CREEP, here you are!!)
 - [X] Add more cards info to json file
 
@@ -26,7 +26,7 @@
 - [ ] Player's actions Menu & User Input Processing
     - [x] Add a "Stop playing" option and associated function
     - [X] Display cards in hand and possibility to play a card
-    - [ ] Player action: place a worker to get resources (*dependance: Location class*)
+    - [ ] **FUTURE VERSION** Player action: place a worker to get resources (*dependance: Location class*)
 
 - [x] Switch_player() method
     - [x] Call switch_player() method where relevant
@@ -45,7 +45,7 @@
     - [x] Player action: display town's dashboard
     - [ ] Player action: play a card in hand
         - [x] Play a card without resources limit
-        - [ ] Add a resource condition to be able to play a card
+        - [ ] **FUTURE VERSION** Add a resource condition to be able to play a card
 
 ### Card Class
 

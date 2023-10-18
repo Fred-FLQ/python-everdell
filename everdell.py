@@ -41,7 +41,7 @@ class Game:
         print(f"\n{self.active_player}, what do you wanna do next?")
         print("1. Display Town's Dashboard")
         print("2. Display cards in hand")
-        print("3. Place a worker")
+        # print("3. Place a worker")
         print("4. Stop playing")
     
      # Process player's choice depending on active player
@@ -55,8 +55,12 @@ class Game:
         elif user_input == "2":
             if self.active_player == self.player1:
                 if len(self.player1_town.cards_in_hand) > 0:
-                    print(f"\n{self.active_player}, here are the cards you have in hand:")
-                    print(self.player1_town.cards_in_hand)
+                    cards_hand_display = (
+                        f"\n{self.active_player}, here are the cards you have in hand:\n"
+                    )
+                    for card, description in self.player1_town.cards_in_hand.items():
+                        cards_hand_display += f"- {card.upper()}: {description}\n"
+                    print(cards_hand_display)
                     self.player1_town.play_card(input(f"{self.active_player}, which card do you wanna play? "))
                 else:
                     print(f"{self.active_player}, you don't have any cards in your hand.")
@@ -64,15 +68,20 @@ class Game:
                     self.process_user_input()
             if self.active_player == self.player2:
                 if len(self.player2_town.cards_in_hand) > 0:
-                    print(f"\n{self.active_player}, here are the cards you have in hand:")
-                    print(self.player2_town.cards_in_hand)
+                    cards_hand_display = (
+                        f"\n{self.active_player}, here are the cards you have in hand:\n"
+                    )
+                    for card, description in self.player2_town.cards_in_hand.items():
+                        cards_hand_display += f"- {card.upper()}: {description}\n"
+                    print(cards_hand_display)
                     self.player2_town.play_card(input(f"{self.active_player}, which card do you wanna play? "))
                 else:
                     print(f"{self.active_player}, you don't have any cards in your hand.")
                     self.action_menu()
                     self.process_user_input()
-        elif user_input == "3":
-            self.place_worker()
+        # Not available yet
+        # elif user_input == "3":
+        #     self.place_worker()
         elif user_input == "4":
             exit()
         else:
@@ -147,10 +156,10 @@ class Town:
         # return cards_in_hand
 
 
-    # Check if played card valid, remove it from player's hand and add it to town
+    # Check if played card is valid, remove it from player's hand and add it to town
     def play_card(self, card):
         if card.lower() in self.cards_in_hand:
-            print(f"\n{self.name}, you just played {card.title()}.")
+            print(f"\n{self.name}, you just played {card.upper()}.")
             played_card = self.cards_in_hand[card.lower()]
             # Checking type of card to add to the right category
             if played_card.deck == "critter":
@@ -178,19 +187,19 @@ class Card:
         self.unique = unique
 
     def __repr__(self):
-        card_repr = f"The {self.name.title()} is a {'unique' if self.unique else ''} {self.deck.title()}. It is a {self.type} card that gives {self.points} Victory Points. It costs:\n"
+        card_repr = f"The {self.name.title()} is a {'unique' if self.unique else ''} {self.deck.title()}. It is a {self.type} card that gives {self.points} Victory Points. It costs: "
 
         # definitely needs a global function to handle plural
         for item in self.cost:
             quantity = item["quantity"]
             resource = item["resource"]
-            card_repr += f"- {quantity} {resource.title()}\n"
+            card_repr += f"- {quantity} {resource.title()} "
 
         return card_repr
 
 
 ##################
-# Game mechanics #
+#  Main program  #
 ##################
 
 intro_logo = r"""
@@ -199,16 +208,8 @@ intro_logo = r"""
 ░▀░░░░▀░░░▀░░▀░▀░▀▀▀░▀░▀░░░▀▀▀░░▀░░▀▀▀░▀░▀░▀▀░░▀▀▀░▀▀▀░▀▀▀
 """
 print(intro_logo)
-player1_name = input("Ready to play Python Everdell?\nWhat is Player 1's name? ")
+player1_name = input("Ready to play Python Everdell?\nWhat is your name? ")
 player2_name = input(
-    "\nWelcome " + str(player1_name) + "!\nWhat is the Player 2's name? "
+    "\nWelcome " + str(player1_name) + "!\nWhat is your opponent's name? "
 )
 current_game = Game(player1_name, player2_name)
-
-# current_game.action_menu()
-# current_game.process_user_input()
-
-
-
-# Check deck length (uncomment for test only)
-# print("lenght of deck:" + str(len(cards_data)))

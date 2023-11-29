@@ -16,6 +16,7 @@ with open("cards_deck.json") as cards_deck:
 #   Game Setup   #
 ##################
 
+
 # New class to handle game mechanics
 class Game:
     def __init__(self, player1, player2):
@@ -29,7 +30,7 @@ class Game:
 
         self.action_menu()
         self.process_user_input()
-    
+
     def switch_player(self):
         if self.active_player == self.player1:
             self.active_player = self.player2
@@ -43,53 +44,80 @@ class Game:
         print("2. Display cards in hand")
         # print("3. Place a worker")
         print("4. Stop playing")
-    
-     # Process player's choice depending on active player
+
+    # Process player's choice depending on active player
     def process_user_input(self):
-        user_input = input(f"{self.active_player}, choose an action: ")
-        if user_input == "1":
-            if self.active_player == self.player1:
-                self.player1_town.town_dashboard()
+        try:
+            # check if user input can be converted to integer
+            user_input = int(input(f"{self.active_player}, choose an action: "))
+
+            if user_input == 1:
+                if self.active_player == self.player1:
+                    self.player1_town.town_dashboard()
+                else:
+                    self.player2_town.town_dashboard()
+            elif user_input == 2:
+                if self.active_player == self.player1:
+                    if len(self.player1_town.cards_in_hand) > 0:
+                        cards_hand_display = f"\n{self.active_player}, here are the cards you have in hand:\n"
+                        for (
+                            card,
+                            description,
+                        ) in self.player1_town.cards_in_hand.items():
+                            cards_hand_display += f"- {card.upper()}: {description}\n"
+                        print(cards_hand_display)
+                        self.player1_town.play_card(
+                            input(
+                                f"{self.active_player}, which card do you wanna play? "
+                            )
+                        )
+                    else:
+                        print(
+                            f"{self.active_player}, you don't have any cards in your hand."
+                        )
+                        self.action_menu()
+                        self.process_user_input()
+                if self.active_player == self.player2:
+                    if len(self.player2_town.cards_in_hand) > 0:
+                        cards_hand_display = f"\n{self.active_player}, here are the cards you have in hand:\n"
+                        for (
+                            card,
+                            description,
+                        ) in self.player2_town.cards_in_hand.items():
+                            cards_hand_display += f"- {card.upper()}: {description}\n"
+                        print(cards_hand_display)
+                        self.player2_town.play_card(
+                            input(
+                                f"{self.active_player}, which card do you wanna play? "
+                            )
+                        )
+                    else:
+                        print(
+                            f"{self.active_player}, you don't have any cards in your hand."
+                        )
+                        self.action_menu()
+                        self.process_user_input()
+            # Not available yet
+            # elif user_input == 3:
+            #     self.place_worker()
+            elif user_input == 4:
+                exit()
             else:
-                self.player2_town.town_dashboard()
-        elif user_input == "2":
-            if self.active_player == self.player1:
-                if len(self.player1_town.cards_in_hand) > 0:
-                    cards_hand_display = (
-                        f"\n{self.active_player}, here are the cards you have in hand:\n"
-                    )
-                    for card, description in self.player1_town.cards_in_hand.items():
-                        cards_hand_display += f"- {card.upper()}: {description}\n"
-                    print(cards_hand_display)
-                    self.player1_town.play_card(input(f"{self.active_player}, which card do you wanna play? "))
-                else:
-                    print(f"{self.active_player}, you don't have any cards in your hand.")
-                    self.action_menu()
-                    self.process_user_input()
-            if self.active_player == self.player2:
-                if len(self.player2_town.cards_in_hand) > 0:
-                    cards_hand_display = (
-                        f"\n{self.active_player}, here are the cards you have in hand:\n"
-                    )
-                    for card, description in self.player2_town.cards_in_hand.items():
-                        cards_hand_display += f"- {card.upper()}: {description}\n"
-                    print(cards_hand_display)
-                    self.player2_town.play_card(input(f"{self.active_player}, which card do you wanna play? "))
-                else:
-                    print(f"{self.active_player}, you don't have any cards in your hand.")
-                    self.action_menu()
-                    self.process_user_input()
-        # Not available yet
-        # elif user_input == "3":
-        #     self.place_worker()
-        elif user_input == "4":
-            exit()
-        else:
+                print(
+                    f"There is no action with number {user_input}. Please input the number of the action you wanna do."
+                )
+                self.action_menu()
+                self.process_user_input()
+
+        except ValueError as ve:
+            # If input is not an integer, show exception to end-user and ask for new input
+            ve_clean = str(ve).split(":")[-1].strip()
             print(
-                "Your choice is not valid. Input the number of the action you wanna do."
+                f"{ve_clean} is not a valid choice. Please input the number of the action you wanna do."
             )
             self.action_menu()
             self.process_user_input()
+
 
 class Town:
     def __init__(self, name, game):
@@ -141,20 +169,19 @@ class Town:
         for cards_count in range(5):
             if len(cards_data) > 0:
                 # Randomize and pop cards from deck
-                i = random.randint(0, len(cards_data)-1)
+                i = random.randint(0, len(cards_data) - 1)
                 card = Card(
-                        cards_data[i]["deck"],
-                        cards_data[i]["name"],
-                        cards_data[i]["type"],
-                        cards_data[i]["cost"],
-                        cards_data[i]["points"],
-                        cards_data[i]["unique"],
-                    )
+                    cards_data[i]["deck"],
+                    cards_data[i]["name"],
+                    cards_data[i]["type"],
+                    cards_data[i]["cost"],
+                    cards_data[i]["points"],
+                    cards_data[i]["unique"],
+                )
                 self.cards_in_hand[cards_data[i]["name"]] = card
                 cards_data.pop(i)
 
         # return cards_in_hand
-
 
     # Check if played card is valid, remove it from player's hand and add it to town
     def play_card(self, card):
@@ -168,13 +195,16 @@ class Town:
                 self.constructions.append(self.cards_in_hand.pop(card.lower()))
             # Adding card's points to Town's Victory Points
             self.total_points += played_card.points
-            print(f"You now have {len(self.constructions)} constructions and {len(self.critters)} critters in your town. It represents {self.total_points} Victory Points.")
+            print(
+                f"You now have {len(self.constructions)} constructions and {len(self.critters)} critters in your town. It represents {self.total_points} Victory Points."
+            )
         else:
             print("You don't have this card in your hand.")
             self.play_card(input("Please choose another card: "))
         self.game.switch_player()
         self.game.action_menu()
         self.game.process_user_input()
+
 
 # Generic class to handle any type of cards
 class Card:

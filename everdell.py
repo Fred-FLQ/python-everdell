@@ -50,7 +50,17 @@ class Game:
         try:
             # check if user input can be converted to integer
             user_input = int(input(f"{self.active_player}, choose an action: "))
+        
+        except ValueError as ve:
+            # If input is not an integer, show exception to end-user and ask for new input
+            ve_clean = str(ve).split(":")[-1].strip()
+            print(
+                f"{ve_clean} is not a valid choice. Please input the number of the action you wanna do."
+            )
+            self.action_menu()
+            self.process_user_input()
 
+        else:
             if user_input == 1:
                 if self.active_player == self.player1:
                     self.player1_town.town_dashboard()
@@ -108,15 +118,6 @@ class Game:
                 )
                 self.action_menu()
                 self.process_user_input()
-
-        except ValueError as ve:
-            # If input is not an integer, show exception to end-user and ask for new input
-            ve_clean = str(ve).split(":")[-1].strip()
-            print(
-                f"{ve_clean} is not a valid choice. Please input the number of the action you wanna do."
-            )
-            self.action_menu()
-            self.process_user_input()
 
 
 class Town:

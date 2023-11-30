@@ -50,9 +50,9 @@ class Game:
         try:
             # check if user input can be converted to integer
             user_input = int(input(f"{self.active_player}, choose an action: "))
-        
+
         except ValueError as ve:
-            # If input is not an integer, show exception to end-user and ask for new input
+            # If input can't be converted, show exception to end-user and ask for new input
             ve_clean = str(ve).split(":")[-1].strip()
             print(
                 f"{ve_clean} is not a valid choice. Please input the number of the action you wanna do."
@@ -228,19 +228,20 @@ class Card:
 
         return card_repr
 
+if __name__ == "__main__":
+    
+    ##################
+    #  Main program  #
+    ##################
 
-##################
-#  Main program  #
-##################
-
-intro_logo = r"""
-░█▀█░█░█░▀█▀░█░█░█▀█░█▀█░░░█▀▀░█░█░█▀▀░█▀▄░█▀▄░█▀▀░█░░░█░░
-░█▀▀░░█░░░█░░█▀█░█░█░█░█░░░█▀▀░▀▄▀░█▀▀░█▀▄░█░█░█▀▀░█░░░█░░
-░▀░░░░▀░░░▀░░▀░▀░▀▀▀░▀░▀░░░▀▀▀░░▀░░▀▀▀░▀░▀░▀▀░░▀▀▀░▀▀▀░▀▀▀
-"""
-print(intro_logo)
-player1_name = input("Ready to play Python Everdell?\nWhat is your name? ")
-player2_name = input(
-    "\nWelcome " + str(player1_name) + "!\nWhat is your opponent's name? "
-)
-current_game = Game(player1_name, player2_name)
+    intro_logo = r"""
+    ░█▀█░█░█░▀█▀░█░█░█▀█░█▀█░░░█▀▀░█░█░█▀▀░█▀▄░█▀▄░█▀▀░█░░░█░░
+    ░█▀▀░░█░░░█░░█▀█░█░█░█░█░░░█▀▀░▀▄▀░█▀▀░█▀▄░█░█░█▀▀░█░░░█░░
+    ░▀░░░░▀░░░▀░░▀░▀░▀▀▀░▀░▀░░░▀▀▀░░▀░░▀▀▀░▀░▀░▀▀░░▀▀▀░▀▀▀░▀▀▀
+    """
+    print(intro_logo)
+    player1_name = input("Ready to play Python Everdell?\nWhat is your name? ")
+    player2_name = input(
+        "\nWelcome " + str(player1_name) + "!\nWhat is your opponent's name? "
+    )
+    current_game = Game(player1_name, player2_name)
